@@ -1,0 +1,181 @@
+{% extends 'static.html' %}
+{% block head %}
+{{ super() }}
+<link rel="icon" type="image/x-icon" href="static/img/wonjun_logo.png">
+<link href = '/static/css/store.css' rel = 'stylesheet'>
+{% endblock %}
+
+{% block body %}
+<section class="page-section bg-light">
+<video autoplay="" muted="" loop="" id="v1">
+  <source src="static/video/intro.mp4" type="video/mp4">
+  이 글자가 보인다면 사용중인 브라우저는 구형입니다.
+
+</video><!-- Introduce-->
+</section>
+
+<section class="page-section>" id="Introduce">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-heading text-uppercase">장원툴</h2>
+      <h3 class="section-subheading text-muted">성북구에 위치한 No1. 공구집 장원툴입니다!</h3>
+    </div>
+  
+    <div class="brand_1">
+      <h1>장원툴은</h1>
+          <img src="static/img/logo.gif">
+      <h1>공식대리점 입니다.</h1>
+      </div>  
+
+
+
+</section>
+<!-- Portfolio Grid-->
+<section class="page-section bg-light" id="portfolio">
+  <div class="container">
+    <div class="text-center">
+      <h2 class="section-heading text-uppercase">온라인스토어</h2>
+      <h3 class="section-subheading text-muted">장원툴을 온라인 스토어에서 만나보세요</h3>
+    </div>
+    <div class="row">
+
+
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><img src="static/img/cert/cert1.JPG"></div>
+          <div class="swiper-slide"><img src="static/img/cert/cert2.JPG"></div>
+          <div class="swiper-slide"><img src="static/img/cert/cert3.JPG"></div>
+        </div>
+    
+        <div class="swiper-pagination"></div>
+    
+        <div class="swiper-button-prev">
+          <div class="material-icons"><</div>
+        </div>
+        <div class="swiper-button-next">
+          <div class="material-icons">></div>
+        </div>
+        
+      </div>
+      
+      
+</section>
+
+
+
+<!--Making Film-->
+<section class="page-section" id="Making Film">
+  <div class="text-center">
+    <div class="container">
+      <h2 class="my-3">장원툴 공식 블로그</h2>
+      <h3 class="section-subheading text-muted">네이버에 올라가있는 최신소식을 확인해보세요!</h3>
+   
+   
+  
+  <div class="container">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+     <!-- main.css 연결 -->
+    <link rel="stylesheet" href="static/css/swiper3.css">
+    <!-- main.js 연결 -->
+    <script defer src="static/js/swiper3.js"></script>
+
+
+
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide"><iframe width="560" height="315" src="https://www.youtube.com/embed/7yxY3_xwWJ4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+          <div class="swiper-slide"><iframe width="560" height="315" src="https://www.youtube.com/embed/rEJi3TMHY1A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+          <div class="swiper-slide"><iframe width="560" height="315" src="https://www.youtube.com/embed/4YEcSp4wgig" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe></div>
+        <div class="swiper-pagination"></div>
+    
+        <div class="swiper-button-prev">
+          <div class="material-icons"><</div>
+        </div>
+        <div class="swiper-button-next">
+          <div class="material-icons">></div>
+        </div>
+        
+      </div>
+
+    </div>
+</section>
+
+
+
+<!--Publishing-->
+<section class="page-section bg-light" id="store_location">
+  <div class="text-center">
+    <div class="container">
+      <h2 class="my-3">매장위치</h2>
+      <h3 class="section-subheading text-muted">장원툴 오프라인 매장 위치입니다. <br> 주소를 클릭하시면 길찾기를 할 수 있습니다.</h3>
+      <table width="10">
+        <tbody>
+          <tr>
+            <td width="10" height="10"></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <p style="margin-top:-12px">
+      <a href="https://naver.me/FJHVMRd1" target="_blank" style="font-size:20px">서울특별시 성북구 화랑로 235 우방아파트 상가 105호 장원툴</a>
+    </p>
+  <div id="map" style="width:100%;height:350px;"></div>
+  
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=05ab79cfbd81f3a011b6a9f127ccf89f&libraries=services"></script>
+  <script>
+  var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+      mapOption = {
+          center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+          level: 3 // 지도의 확대 레벨
+      };  
+  
+  // 지도를 생성합니다    
+  var map = new kakao.maps.Map(mapContainer, mapOption); 
+  
+  // 주소-좌표 변환 객체를 생성합니다
+  var geocoder = new kakao.maps.services.Geocoder();
+  
+  // 주소로 좌표를 검색합니다
+  geocoder.addressSearch('서울 성북구 화랑로 235 우방아파트 상가 105호', function(result, status) {
+  
+      // 정상적으로 검색이 완료됐으면 
+       if (status === kakao.maps.services.Status.OK) {
+  
+          var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+  
+          // 결과값으로 받은 위치를 마커로 표시합니다
+          var marker = new kakao.maps.Marker({
+              map: map,
+              position: coords
+          });
+  
+          // 인포윈도우로 장소에 대한 설명을 표시합니다
+          var infowindow = new kakao.maps.InfoWindow({
+              content: '<div style="width:150px;text-align:center;padding:6px 0;">장원툴</div>'
+          });
+          infowindow.open(map, marker);
+  
+          // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+          map.setCenter(coords);
+      } 
+  });    
+  </script>
+    
+
+</section>
+
+<!-- 맨밑에-->
+<footer class="footer py-4">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-4 text-lg-start">Copyright © jangwontool</div>
+      <div class="col-lg-4 text-lg-start">Email : jun09tool@naver.com</div>
+      <div class="col-lg-4 text-lg-start">고객센터 : 010-3787-4497</div>
+    </div>
+  </div>
+</footer>
+
+
+{% endblock %}
