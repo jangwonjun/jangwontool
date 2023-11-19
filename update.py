@@ -1,68 +1,51 @@
-import json
-from src.lib import message, storage
-import pandas
-from env import SEND, FLASK_ENUM
-from tqdm import tqdm
-from modules.candidate import candidate_data
-from flask import Flask, request, redirect, render_template, url_for, session
-
-app = Flask(__name__, static_url_path='/static')
-
-sdb_system = candidate_data()
-
-student_phone_num_data = sdb_system.search_phone_num_student()[0]
-student_name_data = sdb_system.search_phone_num_student()[1]
-parents_phone_num_data = sdb_system.search_phone_num_parents()[0]
-send_data = sdb_system.search_phone_num_parents()[1]
+import argparse as ap
+import subprocess as su
+import time
+import os
+import env
 
 
+def execute(command: str) -> str:
+    get = command.split()
+    return su.check_output(get).decode("utf-8")
 
-print(len(send_data))
 
-@app.route('/parents_message')
-def parents_send_message():
-    for i in range(len(send_data)):
-        parents_message = f'안녕하세요! {student_name_data[i]} 학부모님 수다방학원입니다. \n금일 수업 내용입니다. \n[진도] : {send_data[i][2]} \n[과제] : {send_data[i][3]} \n[과제 수행도] : {send_data[i][4]} \n[벌점] : {send_data[i][5]} \n[테스트] : {send_data[i][6]} \n[반평균] : {send_data[i][8]} \n[최고점] : {send_data[i][9]} \n[특이사항] : {send_data[i][10]}'
-        '''
-        data = {
-            'messages': [
-                {
-                    'to': parents_phone_num_data[i],
-                    'from': SEND.SENDNUMBER,
-                    'subject': '수다방학원',
-                    'text': parents_message
-                }
-            ]
-        }
-        
-        res = message.send_many(data)
-        print(f"{student_name_data[i]} 학부모에게 성공적으로 전송했습니다")
-        print(json.dumps(json.loads(res.text), indent=2, ensure_ascii=False))
-        '''
-    return "전송하였습니다."
+parser = ap.ArgumentParser()
+parser.add_argument(
+    "-r", "--reset", help='로드할 git 버전을 선택합니다. 예시 입력: HEAD~1', required=False)
+parser.add_argument(
+    "-l", "--login", help="자동 로그인 설정을 켜거나 끕니다. 켰을 때에는 실행 후에 적용됩니다. 예시 입력: false 혹은 true", required=False)
+parser.add_argument("-n", "--noPull", help="pull 없이 서버를 재시작합니다.",
+                    required=False, action="store_true")
+parser.add_argument("-k", "--kill", help="서버를 재시작없이 종료합니다.",
+                    required=False, action="store_true")
+args = parser.parse_args()
+if args.login:
+    if args.login == "true":
+        os.system("git config credential.helper store")
+    elif args.login == "false":
+        os.system("git config --unset credential.helper")
+worktree = "sudo git " + \
+    (f" reset {args.reset} --hard" if args.reset else "pull")
 
-@app.route('/student_message')
-def student_send_message():
-    for i in range(len(send_data)):
-        student_message = f'안녕! 수다방이야 {student_name_data[i]} 반가워! \n[진도] : {send_data[i][2]} \n[과제] : {send_data[i][3]} \n[과제 수행도] : {send_data[i][4]} \n[벌점] : {send_data[i][5]} \n[테스트] : {send_data[i][6]} \n[반평균] : {send_data[i][8]} \n[최고점] : {send_data[i][9]} \n[특이사항] : {send_data[i][10]}'
-        '''
-        data = {
-            'messages': [
-                {
-                    'to': student_phone_num_data[i],
-                    'from': SEND.SENDNUMBER,
-                    'subject': '수다방학원',
-                    'text': student_message
-                }
-            ]
-        }
-        
-        res = message.send_many(data)
-        print(f"{student_name_data[i]}에게 성공적으로 전송했습니다")
-        print(json.dumps(json.loads(res.text), indent=2, ensure_ascii=False))
-        '''
-    return "전송하였습니다."
-        
-    
-if __name__ == '__main__':
-    app.run('0.0.0.0', debug=True, port=FLASK_ENUM.PORT)
+params = execute(f"ps -e").split("\n")[1:]
+token = True
+for i in params:
+    param = [j for j in i.split() if j]
+    if len(param) == 4:
+        if param[3] == env.PROC_NAME and os.getpid() != int(param[0]):
+            result = f"kill {param[0]}"
+            print(result)
+            os.system(result)
+            if token:
+                token = False
+            time.sleep(0.5)
+
+if not args.noPull:
+    os.system(worktree)
+    time.sleep(0.5)
+if not args.kill:
+    file_dir = os.path.abspath(__file__)
+    path = os.path.dirname(file_dir)
+    os.system(
+        f"nohup python3 -u {path}/app.py &")
